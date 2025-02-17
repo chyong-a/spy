@@ -205,22 +205,20 @@ function App() {
           <FormGroup>
             {EnglishSets.map((x) => {
               return (
-                <Tooltip title={x.locations.toString()}>
-                  <FormControlLabel
-                    key={x.name}
-                    control={
-                      <Checkbox
-                        defaultChecked={selectedSets
-                          .map((x) => x.name)
-                          .includes(x.name)}
-                        onChange={(e, value) =>
-                          handleSelectedSetsChange(value, x.name)
-                        }
-                      />
-                    }
-                    label={x.name}
-                  />
-                </Tooltip>
+                <FormControlLabel
+                  key={x.name}
+                  control={
+                    <Checkbox
+                      defaultChecked={selectedSets
+                        .map((x) => x.name)
+                        .includes(x.name)}
+                      onChange={(e, value) =>
+                        handleSelectedSetsChange(value, x.name)
+                      }
+                    />
+                  }
+                  label={x.name}
+                />
               );
             })}
           </FormGroup>
