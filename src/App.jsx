@@ -8,11 +8,19 @@ import {
   FormControlLabel,
   FormGroup,
   IconButton,
+  List,
+  ListItem,
+  ListItemText,
   Slider,
+  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
+import EditIcon from "@mui/icons-material/Edit";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import AddIcon from "@mui/icons-material/Add";
+import ClearIcon from "@mui/icons-material/Clear";
 import { EnglishSets } from "./assets/Sets";
 
 function App() {
@@ -53,6 +61,8 @@ function App() {
     const savedSelectedSets = sessionStorage.getItem("selectedSets");
     return savedSelectedSets ? JSON.parse(savedSelectedSets) : [EnglishSets[0]];
   });
+  const [editedSet, setEditedSet] = useState(sets[0]);
+  const [newPlace, setNewPlace] = useState("");
 
   // functions
   function valuetext(value) {
@@ -93,7 +103,36 @@ function App() {
         JSON.stringify(selectedSets.filter((x) => x.name !== label))
       );
     }
-    console.log(value, label);
+  };
+  const handleEditIconClick = (set) => {
+    setEditedSet(set);
+    setCurrentId("editSet");
+  };
+  const handleAddPlaceIconClick = () => {
+    if (!newPlace.trim()) return;
+
+    var newSets = sets.filter((x) => x.name !== editedSet.name);
+    const newSet = {
+      ...editedSet,
+      locations: [...editedSet.locations, newPlace],
+    };
+    newSets.push(newSet);
+    setSets(newSets);
+    localStorage.setItem("sets", JSON.stringify(newSets));
+    setEditedSet(newSet);
+    setNewPlace("");
+  };
+  const handleDeletePlaceIconClick = (location) => {
+    var newSets = sets.filter((x) => x.name !== editedSet.name);
+    const newSet = {
+      ...editedSet,
+      locations: [...editedSet.locations.filter((x) => x !== location)],
+    };
+    newSets.push(newSet);
+    setSets(newSets);
+    localStorage.setItem("sets", JSON.stringify(newSets));
+    setEditedSet(newSet);
+    setNewPlace("");
   };
   const playersSliderMarks = Array.from(
     { length: defaultValue.maxPlayers - defaultValue.minPlayers + 1 },
@@ -205,7 +244,7 @@ function App() {
         >
           <Typography>Sets</Typography>
           <FormGroup>
-            {EnglishSets.map((x) => {
+            {sets.map((x) => {
               return (
                 <Box sx={{ display: "flex", flexDirection: "row" }}>
                   <FormControlLabel
@@ -227,11 +266,50 @@ function App() {
                       <InfoIcon />
                     </IconButton>
                   </Tooltip>
+                  <IconButton onClick={() => handleEditIconClick(x)}>
+                    <EditIcon />
+                  </IconButton>
                 </Box>
               );
             })}
           </FormGroup>
           <Button onClick={() => setCurrentId("menu")}>Back to menu</Button>
+        </Box>
+      </Wrapper>
+      <Wrapper id="editSet" currentId={currentId}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
+          <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+            {editedSet.name}
+          </Typography>
+          <List dense={false}>
+            {editedSet.locations.map((x) => (
+              <Box alignItems="center" display="flex" flexDirection="row">
+                <ArrowRightIcon />
+                <Typography>{x}</Typography>
+                <IconButton onClick={() => handleDeletePlaceIconClick(x)}>
+                  <ClearIcon />
+                </IconButton>
+              </Box>
+            ))}
+          </List>
+          <Box>
+            <TextField
+              value={newPlace}
+              onChange={(e) => setNewPlace(e.target.value)}
+              label="place"
+              variant="standard"
+            />
+            <IconButton onClick={handleAddPlaceIconClick}>
+              <AddIcon />
+            </IconButton>
+          </Box>
+          <Button onClick={() => setCurrentId("sets")}>Back to sets</Button>
         </Box>
       </Wrapper>
       <Wrapper id="start" currentId={currentId}>
