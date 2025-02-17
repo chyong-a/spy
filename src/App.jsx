@@ -7,10 +7,12 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
+  IconButton,
   Slider,
   Tooltip,
   Typography,
 } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
 import { EnglishSets } from "./assets/Sets";
 
 function App() {
@@ -205,20 +207,27 @@ function App() {
           <FormGroup>
             {EnglishSets.map((x) => {
               return (
-                <FormControlLabel
-                  key={x.name}
-                  control={
-                    <Checkbox
-                      defaultChecked={selectedSets
-                        .map((x) => x.name)
-                        .includes(x.name)}
-                      onChange={(e, value) =>
-                        handleSelectedSetsChange(value, x.name)
-                      }
-                    />
-                  }
-                  label={x.name}
-                />
+                <Box sx={{ display: "flex", flexDirection: "row" }}>
+                  <FormControlLabel
+                    key={x.name}
+                    control={
+                      <Checkbox
+                        defaultChecked={selectedSets
+                          .map((x) => x.name)
+                          .includes(x.name)}
+                        onChange={(e, value) =>
+                          handleSelectedSetsChange(value, x.name)
+                        }
+                      />
+                    }
+                    label={x.name}
+                  />
+                  <Tooltip title={x.locations.join(", ")}>
+                    <IconButton>
+                      <InfoIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
               );
             })}
           </FormGroup>
