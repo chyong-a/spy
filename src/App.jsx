@@ -9,8 +9,6 @@ import {
   FormGroup,
   IconButton,
   List,
-  ListItem,
-  ListItemText,
   Slider,
   TextField,
   Tooltip,
@@ -22,6 +20,7 @@ import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import { EnglishSets } from "./assets/Sets";
+import Countdown from "react-countdown";
 
 function App() {
   // default settings
@@ -63,6 +62,30 @@ function App() {
   });
   const [editedSet, setEditedSet] = useState(sets[0]);
   const [newPlace, setNewPlace] = useState("");
+  const [newSet, setNewSet] = useState("");
+  const [currentPlace, setCurrentPlace] = useState(() => {
+    const savedCurrentPlace = sessionStorage.getItem("currentPlace");
+    const locationsFromSelectedSets = sets
+      .filter((x) => selectedSets.map((x) => x.name).includes(x.name))
+      .map((x) => x.locations)
+      .flat();
+    return savedCurrentPlace
+      ? JSON.parse(savedCurrentPlace)
+      : locationsFromSelectedSets[
+          Math.floor(Math.random() * locationsFromSelectedSets.length)
+        ];
+  });
+  const [currentSpies, setCurrentSpies] = useState(() => {
+    const savedCurrentSpies = sessionStorage.getItem("currentSpies");
+    var curPlayers = Array.from({ length: players }, (_, i) => i + 1);
+    var chosenSpies = [];
+    for (let i = 0; i < spies; i++) {
+      chosenSpies.push(
+        curPlayers.splice(Math.floor(Math.random() * curPlayers.length), 1)[0]
+      );
+    }
+    return savedCurrentSpies ? JSON.parse(savedCurrentSpies) : chosenSpies;
+  });
 
   // functions
   function valuetext(value) {
@@ -85,16 +108,10 @@ function App() {
   };
   const handleSelectedSetsChange = (value, label) => {
     if (value) {
-      setSelectedSets([
-        ...selectedSets,
-        EnglishSets.find((x) => x.name === label),
-      ]);
+      setSelectedSets([...selectedSets, sets.find((x) => x.name === label)]);
       sessionStorage.setItem(
         "selectedSets",
-        JSON.stringify([
-          ...selectedSets,
-          EnglishSets.find((x) => x.name === label),
-        ])
+        JSON.stringify([...selectedSets, sets.find((x) => x.name === label)])
       );
     } else {
       setSelectedSets(selectedSets.filter((x) => x.name !== label));
@@ -134,6 +151,24 @@ function App() {
     setEditedSet(newSet);
     setNewPlace("");
   };
+  const handleAddSetIconClick = () => {
+    if (!newSet.trim()) return;
+    const newS = { name: newSet, locations: [], default: false };
+    const newSets = [...sets, newS];
+    setSets(newSets);
+    localStorage.setItem("sets", JSON.stringify(newSets));
+    setNewSet("");
+  };
+  const handleRemoveSetIconClick = (set) => {
+    setSets([...sets.filter((x) => x.name !== set.name)]);
+    localStorage.setItem(
+      "sets",
+      JSON.stringify([...sets.filter((x) => x.name !== set.name)])
+    );
+  };
+  const handleCountdownOnComplete = () => {
+    setCurrentId("gameFinished");
+  };
   const playersSliderMarks = Array.from(
     { length: defaultValue.maxPlayers - defaultValue.minPlayers + 1 },
     (_, index) => ({
@@ -159,6 +194,11 @@ function App() {
       label: (defaultValue.minTimer + index).toString(),
     })
   );
+
+  // useEffect
+  useEffect(() => {
+    sessionStorage.setItem("currentPlace", JSON.stringify(currentPlace));
+  }, [currentPlace]);
 
   return (
     <>
@@ -246,7 +286,10 @@ function App() {
           <FormGroup>
             {sets.map((x) => {
               return (
-                <Box sx={{ display: "flex", flexDirection: "row" }}>
+                <Box
+                  key={x.name}
+                  sx={{ display: "flex", flexDirection: "row" }}
+                >
                   <FormControlLabel
                     key={x.name}
                     control={
@@ -269,10 +312,27 @@ function App() {
                   <IconButton onClick={() => handleEditIconClick(x)}>
                     <EditIcon />
                   </IconButton>
+                  <IconButton
+                    sx={{ visibility: x.default ? "hidden" : "visible" }}
+                    onClick={() => handleRemoveSetIconClick(x)}
+                  >
+                    <ClearIcon />
+                  </IconButton>
                 </Box>
               );
             })}
           </FormGroup>
+          <Box>
+            <TextField
+              value={newSet}
+              onChange={(e) => setNewSet(e.target.value)}
+              label="set name"
+              variant="standard"
+            />
+            <IconButton onClick={handleAddSetIconClick}>
+              <AddIcon />
+            </IconButton>
+          </Box>
           <Button onClick={() => setCurrentId("menu")}>Back to menu</Button>
         </Box>
       </Wrapper>
@@ -284,12 +344,15 @@ function App() {
             gap: 2,
           }}
         >
-          <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-            {editedSet.name}
-          </Typography>
+          <Typography>{editedSet.name}</Typography>
           <List dense={false}>
-            {editedSet.locations.map((x) => (
-              <Box alignItems="center" display="flex" flexDirection="row">
+            {editedSet.locations.map((x, index) => (
+              <Box
+                key={index}
+                alignItems="center"
+                display="flex"
+                flexDirection="row"
+              >
                 <ArrowRightIcon />
                 <Typography>{x}</Typography>
                 <IconButton onClick={() => handleDeletePlaceIconClick(x)}>
@@ -312,7 +375,7 @@ function App() {
           <Button onClick={() => setCurrentId("sets")}>Back to sets</Button>
         </Box>
       </Wrapper>
-      <Wrapper id="start" currentId={currentId}>
+      <Wrapper id="roleDistribution" currentId={currentId}>
         <Box
           sx={{
             display: "flex",
@@ -320,8 +383,48 @@ function App() {
             gap: 2,
           }}
         >
-          начать
+          {/* generate spies */}
+          {/* go through array of players */}
+          {/* if index matches the spy, then don't show place */}
+          {/* otherwise show place */}
+          {/* if index is the last, setCurrentId=("countdown") */}
+          {currentPlace}
+          <Button onClick={() => setCurrentId("countdown")}>Countdown</Button>
           <Button onClick={() => setCurrentId("menu")}>Back to menu</Button>
+        </Box>
+      </Wrapper>
+      <Wrapper id="countdown" currentId={currentId}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
+          {currentPlace}
+          <Countdown
+            renderer={({ minutes, seconds }) => (
+              <Typography variant="h4">
+                {String(minutes).padStart(2, "0")}:
+                {String(seconds).padStart(2, "0")}
+              </Typography>
+            )}
+            date={Date.now() + timer * 60000}
+            onComplete={handleCountdownOnComplete}
+          />
+          <Button onClick={() => setCurrentId("menu")}>Back to menu</Button>
+        </Box>
+      </Wrapper>
+      <Wrapper id="gameFinished" currentId={currentId}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
+          <Typography>Game finished</Typography>
+          <Button onClick={() => setCurrentId("menu")}>Menu</Button>
         </Box>
       </Wrapper>
       <Wrapper id="menu" currentId={currentId}>
@@ -336,7 +439,10 @@ function App() {
           <Button onClick={() => setCurrentId("spies")}>spies</Button>
           <Button onClick={() => setCurrentId("timer")}>timer</Button>
           <Button onClick={() => setCurrentId("sets")}>sets</Button>
-          <Button variant="contained" onClick={() => setCurrentId("start")}>
+          <Button
+            variant="contained"
+            onClick={() => setCurrentId("roleDistribution")}
+          >
             start
           </Button>
         </Box>

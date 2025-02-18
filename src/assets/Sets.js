@@ -28,6 +28,7 @@ export const EnglishSets = [
       "Theater",
       "Zoo",
     ],
+    default: true,
   },
   {
     name: "Countries",
@@ -43,6 +44,7 @@ export const EnglishSets = [
       "Brazil",
       "Italy",
     ],
+    default: true,
   },
   {
     name: "Workplaces",
@@ -58,6 +60,7 @@ export const EnglishSets = [
       "Farm",
       "Government Office",
     ],
+    default: true,
   },
   {
     name: "Transport",
@@ -72,6 +75,7 @@ export const EnglishSets = [
       "Motorcycle",
       "Space Shuttle",
     ],
+    default: true,
   },
   {
     name: "Events",
@@ -86,6 +90,7 @@ export const EnglishSets = [
       "Carnival",
       "Nightclub",
     ],
+    default: true,
   },
 ];
 
@@ -119,6 +124,7 @@ export const RussianSets = [
       "Театр",
       "Зоопарк",
     ],
+    default: true,
   },
   {
     name: "Страны",
@@ -134,6 +140,7 @@ export const RussianSets = [
       "Бразилия",
       "Италия",
     ],
+    default: true,
   },
   {
     name: "Рабочие места",
@@ -149,6 +156,7 @@ export const RussianSets = [
       "Ферма",
       "Государственное учреждение",
     ],
+    default: true,
   },
   {
     name: "Транспорт",
@@ -163,6 +171,7 @@ export const RussianSets = [
       "Мотоцикл",
       "Космический шаттл",
     ],
+    default: true,
   },
   {
     name: "События",
@@ -177,5 +186,6 @@ export const RussianSets = [
       "Карнавал",
       "Ночной клуб",
     ],
+    default: true,
   },
 ];
