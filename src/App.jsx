@@ -63,29 +63,31 @@ function App() {
   const [editedSet, setEditedSet] = useState(sets[0]);
   const [newPlace, setNewPlace] = useState("");
   const [newSet, setNewSet] = useState("");
-  const [currentPlace, setCurrentPlace] = useState(() => {
-    const savedCurrentPlace = sessionStorage.getItem("currentPlace");
-    const locationsFromSelectedSets = sets
-      .filter((x) => selectedSets.map((x) => x.name).includes(x.name))
-      .map((x) => x.locations)
-      .flat();
-    return savedCurrentPlace
-      ? JSON.parse(savedCurrentPlace)
-      : locationsFromSelectedSets[
-          Math.floor(Math.random() * locationsFromSelectedSets.length)
-        ];
-  });
-  const [currentSpies, setCurrentSpies] = useState(() => {
-    const savedCurrentSpies = sessionStorage.getItem("currentSpies");
-    var curPlayers = Array.from({ length: players }, (_, i) => i + 1);
-    var chosenSpies = [];
-    for (let i = 0; i < spies; i++) {
-      chosenSpies.push(
-        curPlayers.splice(Math.floor(Math.random() * curPlayers.length), 1)[0]
-      );
-    }
-    return savedCurrentSpies ? JSON.parse(savedCurrentSpies) : chosenSpies;
-  });
+  const [currentPlace, setCurrentPlace] = useState("");
+  // const [currentPlace, setCurrentPlace] = useState(() => {
+  //   const savedCurrentPlace = sessionStorage.getItem("currentPlace");
+  //   const locationsFromSelectedSets = sets
+  //     .filter((x) => selectedSets.map((x) => x.name).includes(x.name))
+  //     .map((x) => x.locations)
+  //     .flat();
+  //   return savedCurrentPlace
+  //     ? JSON.parse(savedCurrentPlace)
+  //     : locationsFromSelectedSets[
+  //         Math.floor(Math.random() * locationsFromSelectedSets.length)
+  //       ];
+  // });
+  const [currentSpies, setCurrentSpies] = useState([]);
+  // const [currentSpies, setCurrentSpies] = useState(() => {
+  //   const savedCurrentSpies = sessionStorage.getItem("currentSpies");
+  //   var curPlayers = Array.from({ length: players }, (_, i) => i + 1);
+  //   var chosenSpies = [];
+  //   for (let i = 0; i < spies; i++) {
+  //     chosenSpies.push(
+  //       curPlayers.splice(Math.floor(Math.random() * curPlayers.length), 1)[0]
+  //     );
+  //   }
+  //   return savedCurrentSpies ? JSON.parse(savedCurrentSpies) : chosenSpies;
+  // });
 
   // functions
   function valuetext(value) {
@@ -194,11 +196,31 @@ function App() {
       label: (defaultValue.minTimer + index).toString(),
     })
   );
+  const generatePlace = () => {
+    const places = sets
+      .filter((x) => selectedSets.map((x) => x.name).includes(x.name))
+      .map((x) => x.locations)
+      .flat();
+    const place = places[Math.floor(Math.random() * places.length)];
+    setCurrentPlace(place);
+  };
+  const generateSpies = () => {
+    var curPlayers = Array.from({ length: players }, (_, i) => i + 1);
+    var chosenSpies = [];
+    for (let i = 0; i < spies; i++) {
+      chosenSpies.push(
+        curPlayers.splice(Math.floor(Math.random() * curPlayers.length), 1)[0]
+      );
+    }
+    setCurrentSpies(chosenSpies);
+  };
 
-  // useEffect
   useEffect(() => {
-    sessionStorage.setItem("currentPlace", JSON.stringify(currentPlace));
-  }, [currentPlace]);
+    if (currentId === "roleDistribution") {
+      generatePlace();
+      generateSpies();
+    }
+  }, [currentId]);
 
   return (
     <>
@@ -383,12 +405,16 @@ function App() {
             gap: 2,
           }}
         >
+          {/* generate current place */}
           {/* generate spies */}
           {/* go through array of players */}
           {/* if index matches the spy, then don't show place */}
           {/* otherwise show place */}
-          {/* if index is the last, setCurrentId=("countdown") */}
-          {currentPlace}
+          {/* alternate with a simple pic "pass to the next player" */}
+          {/* if index is the last, "tap to start the game" setCurrentId=("countdown") */}
+          {console.log(currentPlace)}
+          {console.log(currentSpies)}
+          {}
           <Button onClick={() => setCurrentId("countdown")}>Countdown</Button>
           <Button onClick={() => setCurrentId("menu")}>Back to menu</Button>
         </Box>
