@@ -241,7 +241,9 @@ function App() {
     } else {
       setNeutralBoxText(defaultValue.neutralBoxTextEnglish);
     }
-    changeSetsInTheAccordanceWithLanguage();
+    if (localStorage.getItem("sets")) {
+      changeSetsInTheAccordanceWithLanguage();
+    }
   }, [isEnglish]);
 
   return (
