@@ -68,7 +68,6 @@ function App() {
   const [newSet, setNewSet] = useState("");
   const [currentPlace, setCurrentPlace] = useState("");
   const [currentSpies, setCurrentSpies] = useState([]);
-  const [currentPlayers, setCurrentPlayers] = useState([]);
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [neutralBoxText, setNeutralBoxText] = useState(
     defaultValue.neutralBoxText
@@ -208,16 +207,12 @@ function App() {
     }
     setCurrentSpies(chosenSpies);
   };
-  const generatePlayers = () => {
-    var curPlayers = Array.from({ length: players }, (_, i) => i + 1);
-    setCurrentPlayers(curPlayers);
-  };
 
   useEffect(() => {
     if (currentId === "roleDistribution") {
+      setNeutralBoxText(defaultValue.neutralBoxText);
       generatePlace();
       generateSpies();
-      generatePlayers();
       setCurrentPlayer(0.5);
     }
   }, [currentId]);
@@ -243,9 +238,14 @@ function App() {
             min={defaultValue.minPlayers}
             max={defaultValue.maxPlayers}
             valueLabelFormat={valuetext}
-            sx={{ width: "360px" }}
+            sx={{ width: "340px" }}
           />
-          <Button onClick={() => setCurrentId("menu")}>Back to menu</Button>
+          <Button
+            sx={{ color: "#EAEAEA" }}
+            onClick={() => setCurrentId("menu")}
+          >
+            Back to menu
+          </Button>
         </Box>
       </Wrapper>
       <Wrapper id="spies" currentId={currentId}>
@@ -267,9 +267,14 @@ function App() {
             min={defaultValue.minSpies}
             max={Math.round(players / 3)}
             valueLabelFormat={valuetext}
-            sx={{ width: "360px" }}
+            sx={{ width: "340px" }}
           />
-          <Button onClick={() => setCurrentId("menu")}>Back to menu</Button>
+          <Button
+            sx={{ color: "#EAEAEA" }}
+            onClick={() => setCurrentId("menu")}
+          >
+            Back to menu
+          </Button>
         </Box>
       </Wrapper>
       <Wrapper id="timer" currentId={currentId}>
@@ -291,9 +296,14 @@ function App() {
             min={defaultValue.minTimer}
             max={defaultValue.maxTimer}
             valueLabelFormat={minutes}
-            sx={{ width: "360px" }}
+            sx={{ width: "340px" }}
           />
-          <Button onClick={() => setCurrentId("menu")}>Back to menu</Button>
+          <Button
+            sx={{ color: "#EAEAEA" }}
+            onClick={() => setCurrentId("menu")}
+          >
+            Back to menu
+          </Button>
         </Box>
       </Wrapper>
       <Wrapper id="sets" currentId={currentId}>
@@ -316,6 +326,12 @@ function App() {
                     key={x.name}
                     control={
                       <Checkbox
+                        sx={{
+                          color: "#EAEAEA",
+                          "&.Mui-checked": {
+                            color: "#1ABC9C",
+                          },
+                        }}
                         defaultChecked={selectedSets
                           .map((x) => x.name)
                           .includes(x.name)}
@@ -326,16 +342,27 @@ function App() {
                     }
                     label={x.name}
                   />
-                  <Tooltip title={x.locations.join(", ")}>
-                    <IconButton>
-                      <InfoIcon />
-                    </IconButton>
-                  </Tooltip>
-                  <IconButton onClick={() => handleEditIconClick(x)}>
+                  <IconButton
+                    sx={{
+                      color: "#EAEAEA",
+                      "&:hover": {
+                        color: "#1ABC9C",
+                        backgroundColor: "hsla(176, 94.60%, 56.30%, 0.10)",
+                      },
+                    }}
+                    onClick={() => handleEditIconClick(x)}
+                  >
                     <EditIcon />
                   </IconButton>
                   <IconButton
-                    sx={{ visibility: x.default ? "hidden" : "visible" }}
+                    sx={{
+                      color: "#EAEAEA",
+                      "&:hover": {
+                        color: "#1ABC9C",
+                        backgroundColor: "hsla(176, 94.60%, 56.30%, 0.10)",
+                      },
+                      visibility: x.default ? "hidden" : "visible",
+                    }}
                     onClick={() => handleRemoveSetIconClick(x)}
                   >
                     <ClearIcon />
@@ -346,16 +373,50 @@ function App() {
           </FormGroup>
           <Box>
             <TextField
+              sx={{
+                "& label": {
+                  color: "#EAEAEA",
+                },
+                "& label.Mui-focused": {
+                  color: "#1ABC9C",
+                },
+                "& .MuiInputBase-input": {
+                  color: "#EAEAEA",
+                },
+                "& .MuiInput-underline:before": {
+                  borderBottomColor: "#EAEAEA",
+                },
+                "& .MuiInput-underline:hover:before": {
+                  borderBottomColor: "#1ABC9C",
+                },
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: "#1ABC9C",
+                },
+              }}
               value={newSet}
               onChange={(e) => setNewSet(e.target.value)}
               label="set name"
               variant="standard"
             />
-            <IconButton onClick={handleAddSetIconClick}>
+            <IconButton
+              sx={{
+                color: "#EAEAEA",
+                "&:hover": {
+                  color: "#1ABC9C",
+                  backgroundColor: "hsla(176, 94.60%, 56.30%, 0.10)",
+                },
+              }}
+              onClick={handleAddSetIconClick}
+            >
               <AddIcon />
             </IconButton>
           </Box>
-          <Button onClick={() => setCurrentId("menu")}>Back to menu</Button>
+          <Button
+            sx={{ color: "#EAEAEA" }}
+            onClick={() => setCurrentId("menu")}
+          >
+            Back to menu
+          </Button>
         </Box>
       </Wrapper>
       <Wrapper id="editSet" currentId={currentId}>
@@ -377,7 +438,16 @@ function App() {
               >
                 <ArrowRightIcon />
                 <Typography>{x}</Typography>
-                <IconButton onClick={() => handleDeletePlaceIconClick(x)}>
+                <IconButton
+                  sx={{
+                    color: "#EAEAEA",
+                    "&:hover": {
+                      color: "#1ABC9C",
+                      backgroundColor: "hsla(176, 94.60%, 56.30%, 0.10)",
+                    },
+                  }}
+                  onClick={() => handleDeletePlaceIconClick(x)}
+                >
                   <ClearIcon />
                 </IconButton>
               </Box>
@@ -385,16 +455,50 @@ function App() {
           </List>
           <Box>
             <TextField
+              sx={{
+                "& label": {
+                  color: "#EAEAEA",
+                },
+                "& label.Mui-focused": {
+                  color: "#1ABC9C",
+                },
+                "& .MuiInputBase-input": {
+                  color: "#EAEAEA",
+                },
+                "& .MuiInput-underline:before": {
+                  borderBottomColor: "#EAEAEA",
+                },
+                "& .MuiInput-underline:hover:before": {
+                  borderBottomColor: "#1ABC9C",
+                },
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: "#1ABC9C",
+                },
+              }}
               value={newPlace}
               onChange={(e) => setNewPlace(e.target.value)}
               label="place"
               variant="standard"
             />
-            <IconButton onClick={handleAddPlaceIconClick}>
+            <IconButton
+              sx={{
+                color: "#EAEAEA",
+                "&:hover": {
+                  color: "#1ABC9C",
+                  backgroundColor: "hsla(176, 94.60%, 56.30%, 0.10)",
+                },
+              }}
+              onClick={handleAddPlaceIconClick}
+            >
               <AddIcon />
             </IconButton>
           </Box>
-          <Button onClick={() => setCurrentId("sets")}>Back to sets</Button>
+          <Button
+            sx={{ color: "#EAEAEA" }}
+            onClick={() => setCurrentId("sets")}
+          >
+            Back to sets
+          </Button>
         </Box>
       </Wrapper>
       <Wrapper id="roleDistribution" currentId={currentId}>
@@ -417,7 +521,12 @@ function App() {
               onClick={handleChangeBoxInDistribution}
             />
           )}
-          <Button onClick={() => setCurrentId("menu")}>Back to menu</Button>
+          <Button
+            sx={{ color: "#EAEAEA" }}
+            onClick={() => setCurrentId("menu")}
+          >
+            Back to menu
+          </Button>
         </Box>
       </Wrapper>
       <Wrapper id="countdown" currentId={currentId}>
@@ -428,7 +537,6 @@ function App() {
             gap: 2,
           }}
         >
-          {currentPlace}
           <Countdown
             renderer={({ minutes, seconds }) => (
               <Typography variant="h4">
@@ -439,7 +547,12 @@ function App() {
             date={Date.now() + timer * 60000}
             onComplete={handleCountdownOnComplete}
           />
-          <Button onClick={() => setCurrentId("menu")}>Back to menu</Button>
+          <Button
+            sx={{ color: "#EAEAEA" }}
+            onClick={() => setCurrentId("menu")}
+          >
+            Back to menu
+          </Button>
         </Box>
       </Wrapper>
       <Wrapper id="gameFinished" currentId={currentId}>
@@ -451,7 +564,12 @@ function App() {
           }}
         >
           <Typography>Game finished</Typography>
-          <Button onClick={() => setCurrentId("menu")}>Menu</Button>
+          <Button
+            sx={{ color: "#EAEAEA" }}
+            onClick={() => setCurrentId("menu")}
+          >
+            Menu
+          </Button>
         </Box>
       </Wrapper>
       <Wrapper id="menu" currentId={currentId}>
@@ -462,11 +580,32 @@ function App() {
             gap: 2,
           }}
         >
-          <Button onClick={() => setCurrentId("players")}>players</Button>
-          <Button onClick={() => setCurrentId("spies")}>spies</Button>
-          <Button onClick={() => setCurrentId("timer")}>timer</Button>
-          <Button onClick={() => setCurrentId("sets")}>sets</Button>
           <Button
+            sx={{ color: "#EAEAEA" }}
+            onClick={() => setCurrentId("players")}
+          >
+            players
+          </Button>
+          <Button
+            sx={{ color: "#EAEAEA" }}
+            onClick={() => setCurrentId("spies")}
+          >
+            spies
+          </Button>
+          <Button
+            sx={{ color: "#EAEAEA" }}
+            onClick={() => setCurrentId("timer")}
+          >
+            timer
+          </Button>
+          <Button
+            sx={{ color: "#EAEAEA" }}
+            onClick={() => setCurrentId("sets")}
+          >
+            sets
+          </Button>
+          <Button
+            sx={{ backgroundColor: "#1ABC9C" }}
             variant="contained"
             onClick={() => setCurrentId("roleDistribution")}
           >
