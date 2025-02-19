@@ -572,7 +572,7 @@ function App() {
         >
           <Countdown
             renderer={({ minutes, seconds }) => (
-              <Typography variant="h4">
+              <Typography sx={{ color: "#1ABC9C" }} variant="h4">
                 {String(minutes).padStart(2, "0")}:
                 {String(seconds).padStart(2, "0")}
               </Typography>
