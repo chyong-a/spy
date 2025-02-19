@@ -4,11 +4,32 @@ export const RoleBox = ({ place, isSpy, onClick }) => {
   return (
     <Box onClick={onClick}>
       {isSpy ? (
-        <Typography style={{ color: "#E94560" }}>
+        // <Typography style={{ color: "#E94560" }}>
+        <Typography
+          variant="h5"
+          sx={{
+            color: "#E94560", // Intense red for danger
+            fontWeight: "bold",
+            textTransform: "uppercase",
+            textShadow: "0px 0px 10px rgba(255, 0, 0, 0.9)",
+            mt: 4,
+          }}
+        >
           YOU ARE A SPY! DON'T REVEAL YOURSELF!
         </Typography>
       ) : (
-        <Typography style={{ color: "#0F3460" }}>{place}</Typography>
+        <Typography
+          variant="h3"
+          sx={{
+            color: "#0F3460", // Gold for attention
+            fontWeight: "bold",
+            textShadow: "2px 2px 8px rgba(15, 52, 96, 0.6)",
+            mt: 2,
+          }}
+        >
+          {place}
+        </Typography>
+        // <Typography style={{ color: "#0F3460" }}>{place}</Typography>
       )}
     </Box>
   );

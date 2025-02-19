@@ -238,7 +238,18 @@ function App() {
             min={defaultValue.minPlayers}
             max={defaultValue.maxPlayers}
             valueLabelFormat={valuetext}
-            sx={{ width: "340px" }}
+            sx={{
+              color: "#EAEAEA",
+              width: "340px",
+              "& .MuiSlider-markLabel": {
+                color: "#EAEAEA",
+                fontSize: "14px",
+              },
+              "& .MuiSlider-markLabelActive": {
+                color: "#1ABC9C",
+                fontWeight: "bold",
+              },
+            }}
           />
           <Button
             sx={{ color: "#EAEAEA" }}
@@ -267,7 +278,18 @@ function App() {
             min={defaultValue.minSpies}
             max={Math.round(players / 3)}
             valueLabelFormat={valuetext}
-            sx={{ width: "340px" }}
+            sx={{
+              color: "#EAEAEA",
+              width: "340px",
+              "& .MuiSlider-markLabel": {
+                color: "#EAEAEA",
+                fontSize: "14px",
+              },
+              "& .MuiSlider-markLabelActive": {
+                color: "#1ABC9C",
+                fontWeight: "bold",
+              },
+            }}
           />
           <Button
             sx={{ color: "#EAEAEA" }}
@@ -296,7 +318,18 @@ function App() {
             min={defaultValue.minTimer}
             max={defaultValue.maxTimer}
             valueLabelFormat={minutes}
-            sx={{ width: "340px" }}
+            sx={{
+              color: "#EAEAEA",
+              width: "340px",
+              "& .MuiSlider-markLabel": {
+                color: "#EAEAEA",
+                fontSize: "14px",
+              },
+              "& .MuiSlider-markLabelActive": {
+                color: "#1ABC9C",
+                fontWeight: "bold",
+              },
+            }}
           />
           <Button
             sx={{ color: "#EAEAEA" }}
