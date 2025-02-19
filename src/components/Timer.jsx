@@ -8,6 +8,7 @@ export const Timer = ({
   min,
   max,
   setCurrentId,
+  isEnglish,
 }) => {
   return (
     <Box
@@ -27,7 +28,7 @@ export const Timer = ({
           textShadow: "1px 1px 4px rgba(0, 0, 0, 0.5)",
         }}
       >
-        Timer
+        {isEnglish ? "Timer" : "Таймер"}
       </Typography>
       <Slider
         value={timer}
@@ -53,7 +54,7 @@ export const Timer = ({
         }}
       />
       <Button sx={{ color: "#EAEAEA" }} onClick={() => setCurrentId("menu")}>
-        Back to menu
+        {isEnglish ? "Back to menu" : "Назад"}
       </Button>
     </Box>
   );

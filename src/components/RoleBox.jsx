@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-export const RoleBox = ({ place, isSpy, onClick }) => {
+export const RoleBox = ({ place, isSpy, onClick, isEnglish }) => {
   return (
     <Box onClick={onClick}>
       {isSpy ? (
@@ -14,7 +14,9 @@ export const RoleBox = ({ place, isSpy, onClick }) => {
             mt: 4,
           }}
         >
-          YOU ARE A SPY! DON'T REVEAL YOURSELF!
+          {isEnglish
+            ? "YOU ARE A SPY! DON'T REVEAL YOURSELF!"
+            : "ТЫ ШПИОН! СМОТРИ НЕ ПОПАДИСЬ"}
         </Typography>
       ) : (
         <Typography

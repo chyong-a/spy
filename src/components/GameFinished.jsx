@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 
-export const GameFinished = ({ setCurrentId }) => {
+export const GameFinished = ({ setCurrentId, isEnglish }) => {
   return (
     <Box
       sx={{
@@ -20,10 +20,10 @@ export const GameFinished = ({ setCurrentId }) => {
           mt: 3,
         }}
       >
-        Game Finished
+        {isEnglish ? "Game Finished" : "Конец игры"}
       </Typography>
       <Button sx={{ color: "#EAEAEA" }} onClick={() => setCurrentId("menu")}>
-        Menu
+        {isEnglish ? "Menu" : "Меню"}
       </Button>
     </Box>
   );

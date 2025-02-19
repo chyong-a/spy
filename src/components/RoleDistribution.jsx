@@ -9,6 +9,7 @@ export const RoleDistribution = ({
   currentPlace,
   isSpy,
   setCurrentId,
+  isEnglish,
 }) => {
   return (
     <Box
@@ -28,10 +29,11 @@ export const RoleDistribution = ({
           place={currentPlace}
           isSpy={isSpy}
           onClick={handleChangeBoxInDistribution}
+          isEnglish={isEnglish}
         />
       )}
       <Button sx={{ color: "#1ABC9C" }} onClick={() => setCurrentId("menu")}>
-        Exit
+        {isEnglish ? "Exit" : "Выход"}
       </Button>
     </Box>
   );

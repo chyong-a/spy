@@ -22,6 +22,7 @@ export const Sets = ({
   setNewSet,
   handleAddSetIconClick,
   setCurrentId,
+  isEnglish,
 }) => {
   return (
     <Box
@@ -42,7 +43,7 @@ export const Sets = ({
           mb: 1,
         }}
       >
-        Sets
+        {isEnglish ? "Sets" : "Наборы"}
       </Typography>
       <FormGroup>
         {sets.map((x) => {
@@ -121,7 +122,7 @@ export const Sets = ({
           }}
           value={newSet}
           onChange={(e) => setNewSet(e.target.value)}
-          label="set name"
+          label={isEnglish ? "set name" : "название набора"}
           variant="standard"
         />
         <IconButton
@@ -138,7 +139,7 @@ export const Sets = ({
         </IconButton>
       </Box>
       <Button sx={{ color: "#EAEAEA" }} onClick={() => setCurrentId("menu")}>
-        Back to menu
+        {isEnglish ? "Back to menu" : "Назад"}
       </Button>
     </Box>
   );

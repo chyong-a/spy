@@ -5,6 +5,7 @@ export const CountdownComponent = ({
   handleCountdownOnComplete,
   setCurrentId,
   timer,
+  isEnglish,
 }) => {
   return (
     <Box
@@ -25,7 +26,7 @@ export const CountdownComponent = ({
         onComplete={handleCountdownOnComplete}
       />
       <Button sx={{ color: "#EAEAEA" }} onClick={() => setCurrentId("menu")}>
-        Back to menu
+        {isEnglish ? "Back to menu" : "Назад"}
       </Button>
     </Box>
   );

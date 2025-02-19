@@ -8,6 +8,7 @@ export const Players = ({
   min,
   max,
   setCurrentId,
+  isEnglish,
 }) => {
   return (
     <Box
@@ -27,7 +28,7 @@ export const Players = ({
           textShadow: "1px 1px 4px rgba(0, 0, 0, 0.5)",
         }}
       >
-        Number of players
+        {isEnglish ? "Number of players" : "Число игроков"}
       </Typography>
       <Slider
         value={players}
@@ -53,7 +54,7 @@ export const Players = ({
         }}
       />
       <Button sx={{ color: "#EAEAEA" }} onClick={() => setCurrentId("menu")}>
-        Back to menu
+        {isEnglish ? "Back to menu" : "Назад"}
       </Button>
     </Box>
   );

@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 
-export const Menu = ({ setCurrentId }) => {
+export const Menu = ({ setCurrentId, isEnglish, handleLanguageChange }) => {
   return (
     <Box
       sx={{
@@ -20,27 +20,35 @@ export const Menu = ({ setCurrentId }) => {
           mb: 2,
         }}
       >
-        Spy Game
+        {isEnglish ? "Spy Game" : "Шпион"}
       </Typography>
       <Button sx={{ color: "#EAEAEA" }} onClick={() => setCurrentId("players")}>
-        players
+        {isEnglish ? "players" : "игроки"}
       </Button>
       <Button sx={{ color: "#EAEAEA" }} onClick={() => setCurrentId("spies")}>
-        spies
+        {isEnglish ? "spies" : "шпионы"}
       </Button>
       <Button sx={{ color: "#EAEAEA" }} onClick={() => setCurrentId("timer")}>
-        timer
+        {isEnglish ? "timer" : "таймер"}
       </Button>
       <Button sx={{ color: "#EAEAEA" }} onClick={() => setCurrentId("sets")}>
-        sets
+        {isEnglish ? "sets" : "наборы"}
       </Button>
       <Button
         sx={{ backgroundColor: "#1ABC9C" }}
         variant="contained"
         onClick={() => setCurrentId("roleDistribution")}
       >
-        start
+        {isEnglish ? "start" : "начать"}
       </Button>
+      <Box>
+        <Button
+          sx={{ color: "#EAEAEA" }}
+          onClick={() => handleLanguageChange()}
+        >
+          {isEnglish ? "RU" : "EN"}
+        </Button>
+      </Box>
     </Box>
   );
 };

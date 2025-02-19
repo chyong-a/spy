@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { Wrapper } from "./components/Wrapper";
-import { EnglishSets } from "./assets/Sets";
+import { EnglishSets, RussianSets } from "./assets/Sets";
 import { Menu } from "./components/Menu";
 import { GameFinished } from "./components/GameFinished";
 import { CountdownComponent } from "./components/CountdownComponent";
@@ -24,7 +24,8 @@ function App() {
     maxTimer: 15,
     minTimer: 1,
     defaultSetChecked: "Basic",
-    neutralBoxText: "Tap to check the place",
+    neutralBoxTextEnglish: "Tap to check the place",
+    neutralBoxTextRussian: "Нажми, чтобы увидеть место",
   };
 
   // states
@@ -58,15 +59,20 @@ function App() {
   const [currentSpies, setCurrentSpies] = useState([]);
   const [currentPlayer, setCurrentPlayer] = useState(0);
   const [neutralBoxText, setNeutralBoxText] = useState(
-    defaultValue.neutralBoxText
+    defaultValue.neutralBoxTextEnglish
   );
+  const [isEnglish, setIsEnglish] = useState(true);
 
   // functions
   function valuetext(value) {
     return `${value}`;
   }
   function minutes(value) {
-    return `${value} min`;
+    if (isEnglish) {
+      return `${value} min`;
+    } else {
+      return `${value} мин`;
+    }
   }
   const handlePlayersChange = (value) => {
     setPlayers(value);
@@ -146,11 +152,31 @@ function App() {
   const handleChangeBoxInDistribution = () => {
     setCurrentPlayer(currentPlayer + 0.5);
     if (currentPlayer >= players) {
-      setNeutralBoxText("START THE GAME");
+      if (isEnglish) {
+        setNeutralBoxText("START THE GAME");
+      } else {
+        setNeutralBoxText("НАЧАТЬ ИГРУ");
+      }
     }
     if (currentPlayer >= players + 0.5) {
       setCurrentId("countdown");
     }
+  };
+  const handleLanguageChange = () => {
+    setIsEnglish(!isEnglish);
+  };
+  const changeSetsInTheAccordanceWithLanguage = () => {
+    const nonDefault = JSON.parse(localStorage.getItem("sets"))
+      .flat()
+      .filter((x) => !x.default);
+    var newSetsToBeSet = [...nonDefault];
+    if (isEnglish) {
+      newSetsToBeSet = [...newSetsToBeSet, ...EnglishSets];
+    } else {
+      newSetsToBeSet = [...newSetsToBeSet, ...RussianSets];
+    }
+    setSets(newSetsToBeSet);
+    localStorage.setItem("sets", JSON.stringify(newSetsToBeSet));
   };
   const playersSliderMarks = Array.from(
     { length: defaultValue.maxPlayers - defaultValue.minPlayers + 1 },
@@ -198,12 +224,25 @@ function App() {
 
   useEffect(() => {
     if (currentId === "roleDistribution") {
-      setNeutralBoxText(defaultValue.neutralBoxText);
       generatePlace();
       generateSpies();
       setCurrentPlayer(0.5);
+      if (isEnglish) {
+        setNeutralBoxText(defaultValue.neutralBoxTextEnglish);
+      } else {
+        setNeutralBoxText(defaultValue.neutralBoxTextRussian);
+      }
     }
   }, [currentId]);
+
+  useEffect(() => {
+    if (!isEnglish) {
+      setNeutralBoxText(defaultValue.neutralBoxTextRussian);
+    } else {
+      setNeutralBoxText(defaultValue.neutralBoxTextEnglish);
+    }
+    changeSetsInTheAccordanceWithLanguage();
+  }, [isEnglish]);
 
   return (
     <>
@@ -216,6 +255,7 @@ function App() {
           min={defaultValue.minPlayers}
           max={defaultValue.maxPlayers}
           setCurrentId={setCurrentId}
+          isEnglish={isEnglish}
         />
       </Wrapper>
       <Wrapper id="spies" currentId={currentId}>
@@ -227,6 +267,7 @@ function App() {
           min={defaultValue.minSpies}
           max={Math.round(players / 3)}
           setCurrentId={setCurrentId}
+          isEnglish={isEnglish}
         />
       </Wrapper>
       <Wrapper id="timer" currentId={currentId}>
@@ -238,6 +279,7 @@ function App() {
           min={defaultValue.minTimer}
           max={defaultValue.maxTimer}
           setCurrentId={setCurrentId}
+          isEnglish={isEnglish}
         />
       </Wrapper>
       <Wrapper id="sets" currentId={currentId}>
@@ -251,6 +293,7 @@ function App() {
           setNewSet={setNewSet}
           handleAddSetIconClick={handleAddSetIconClick}
           setCurrentId={setCurrentId}
+          isEnglish={isEnglish}
         />
       </Wrapper>
       <Wrapper id="editSet" currentId={currentId}>
@@ -271,6 +314,7 @@ function App() {
           currentPlace={currentPlace}
           isSpy={currentSpies.includes(currentPlayer)}
           setCurrentId={setCurrentId}
+          isEnglish={isEnglish}
         />
       </Wrapper>
       <Wrapper id="countdown" currentId={currentId}>
@@ -278,13 +322,18 @@ function App() {
           setCurrentId={setCurrentId}
           handleCountdownOnComplete={handleCountdownOnComplete}
           timer={timer}
+          isEnglish={isEnglish}
         />
       </Wrapper>
       <Wrapper id="gameFinished" currentId={currentId}>
-        <GameFinished setCurrentId={setCurrentId} />
+        <GameFinished setCurrentId={setCurrentId} isEnglish={isEnglish} />
       </Wrapper>
       <Wrapper id="menu" currentId={currentId}>
-        <Menu setCurrentId={setCurrentId} />
+        <Menu
+          setCurrentId={setCurrentId}
+          handleLanguageChange={handleLanguageChange}
+          isEnglish={isEnglish}
+        />
       </Wrapper>
     </>
   );

@@ -8,6 +8,7 @@ export const Spies = ({
   min,
   max,
   setCurrentId,
+  isEnglish,
 }) => {
   return (
     <Box
@@ -27,7 +28,7 @@ export const Spies = ({
           textShadow: "1px 1px 4px rgba(0, 0, 0, 0.5)",
         }}
       >
-        Number of spies
+        {isEnglish ? "Number of spies" : "Число шпионов"}
       </Typography>
       <Slider
         value={spies}
@@ -53,7 +54,7 @@ export const Spies = ({
         }}
       />
       <Button sx={{ color: "#EAEAEA" }} onClick={() => setCurrentId("menu")}>
-        Back to menu
+        {isEnglish ? "Back to menu" : "Назад"}
       </Button>
     </Box>
   );
