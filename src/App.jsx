@@ -21,6 +21,8 @@ import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import { EnglishSets } from "./assets/Sets";
 import Countdown from "react-countdown";
+import { NeutralBox } from "./components/NeutralBox";
+import { RoleBox } from "./components/RoleBox";
 
 function App() {
   // default settings
@@ -34,6 +36,7 @@ function App() {
     maxTimer: 15,
     minTimer: 1,
     defaultSetChecked: "Basic",
+    neutralBoxText: "Tap to check the place",
   };
 
   // states
@@ -64,30 +67,12 @@ function App() {
   const [newPlace, setNewPlace] = useState("");
   const [newSet, setNewSet] = useState("");
   const [currentPlace, setCurrentPlace] = useState("");
-  // const [currentPlace, setCurrentPlace] = useState(() => {
-  //   const savedCurrentPlace = sessionStorage.getItem("currentPlace");
-  //   const locationsFromSelectedSets = sets
-  //     .filter((x) => selectedSets.map((x) => x.name).includes(x.name))
-  //     .map((x) => x.locations)
-  //     .flat();
-  //   return savedCurrentPlace
-  //     ? JSON.parse(savedCurrentPlace)
-  //     : locationsFromSelectedSets[
-  //         Math.floor(Math.random() * locationsFromSelectedSets.length)
-  //       ];
-  // });
   const [currentSpies, setCurrentSpies] = useState([]);
-  // const [currentSpies, setCurrentSpies] = useState(() => {
-  //   const savedCurrentSpies = sessionStorage.getItem("currentSpies");
-  //   var curPlayers = Array.from({ length: players }, (_, i) => i + 1);
-  //   var chosenSpies = [];
-  //   for (let i = 0; i < spies; i++) {
-  //     chosenSpies.push(
-  //       curPlayers.splice(Math.floor(Math.random() * curPlayers.length), 1)[0]
-  //     );
-  //   }
-  //   return savedCurrentSpies ? JSON.parse(savedCurrentSpies) : chosenSpies;
-  // });
+  const [currentPlayers, setCurrentPlayers] = useState([]);
+  const [currentPlayer, setCurrentPlayer] = useState(0);
+  const [neutralBoxText, setNeutralBoxText] = useState(
+    defaultValue.neutralBoxText
+  );
 
   // functions
   function valuetext(value) {
@@ -171,6 +156,15 @@ function App() {
   const handleCountdownOnComplete = () => {
     setCurrentId("gameFinished");
   };
+  const handleChangeBoxInDistribution = () => {
+    setCurrentPlayer(currentPlayer + 0.5);
+    if (currentPlayer >= players) {
+      setNeutralBoxText("START THE GAME");
+    }
+    if (currentPlayer >= players + 0.5) {
+      setCurrentId("countdown");
+    }
+  };
   const playersSliderMarks = Array.from(
     { length: defaultValue.maxPlayers - defaultValue.minPlayers + 1 },
     (_, index) => ({
@@ -214,11 +208,17 @@ function App() {
     }
     setCurrentSpies(chosenSpies);
   };
+  const generatePlayers = () => {
+    var curPlayers = Array.from({ length: players }, (_, i) => i + 1);
+    setCurrentPlayers(curPlayers);
+  };
 
   useEffect(() => {
     if (currentId === "roleDistribution") {
       generatePlace();
       generateSpies();
+      generatePlayers();
+      setCurrentPlayer(0.5);
     }
   }, [currentId]);
 
@@ -405,17 +405,18 @@ function App() {
             gap: 2,
           }}
         >
-          {/* generate current place */}
-          {/* generate spies */}
-          {/* go through array of players */}
-          {/* if index matches the spy, then don't show place */}
-          {/* otherwise show place */}
-          {/* alternate with a simple pic "pass to the next player" */}
-          {/* if index is the last, "tap to start the game" setCurrentId=("countdown") */}
-          {console.log(currentPlace)}
-          {console.log(currentSpies)}
-          {}
-          <Button onClick={() => setCurrentId("countdown")}>Countdown</Button>
+          {!Number.isInteger(currentPlayer) ? (
+            <NeutralBox
+              text={neutralBoxText}
+              onClick={handleChangeBoxInDistribution}
+            />
+          ) : (
+            <RoleBox
+              place={currentPlace}
+              isSpy={currentSpies.includes(currentPlayer)}
+              onClick={handleChangeBoxInDistribution}
+            />
+          )}
           <Button onClick={() => setCurrentId("menu")}>Back to menu</Button>
         </Box>
       </Wrapper>
