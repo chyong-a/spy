@@ -1,31 +1,19 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { Wrapper } from "./components/Wrapper";
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  IconButton,
-  List,
-  Slider,
-  TextField,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info";
-import EditIcon from "@mui/icons-material/Edit";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import AddIcon from "@mui/icons-material/Add";
-import ClearIcon from "@mui/icons-material/Clear";
 import { EnglishSets } from "./assets/Sets";
-import Countdown from "react-countdown";
-import { NeutralBox } from "./components/NeutralBox";
-import { RoleBox } from "./components/RoleBox";
+import { Menu } from "./components/Menu";
+import { GameFinished } from "./components/GameFinished";
+import { CountdownComponent } from "./components/CountdownComponent";
+import { RoleDistribution } from "./components/RoleDistribution";
+import { EditSet } from "./components/EditSet";
+import { Sets } from "./components/Sets";
+import { Timer } from "./components/Timer";
+import { Spies } from "./components/Spies";
+import { Players } from "./components/Players";
 
 function App() {
-  // default settings
+  // defaults
   const defaultValue = {
     defaultPlayers: 3,
     defaultSpies: 1,
@@ -220,431 +208,83 @@ function App() {
   return (
     <>
       <Wrapper id="players" currentId={currentId}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-          }}
-        >
-          <Typography>Number of players</Typography>
-          <Slider
-            value={players}
-            onChange={(e, newValue) => handlePlayersChange(newValue)}
-            getAriaValueText={valuetext}
-            step={1}
-            valueLabelDisplay="auto"
-            marks={playersSliderMarks}
-            min={defaultValue.minPlayers}
-            max={defaultValue.maxPlayers}
-            valueLabelFormat={valuetext}
-            sx={{
-              color: "#EAEAEA",
-              width: "340px",
-              "& .MuiSlider-markLabel": {
-                color: "#EAEAEA",
-                fontSize: "14px",
-              },
-              "& .MuiSlider-markLabelActive": {
-                color: "#1ABC9C",
-                fontWeight: "bold",
-              },
-            }}
-          />
-          <Button
-            sx={{ color: "#EAEAEA" }}
-            onClick={() => setCurrentId("menu")}
-          >
-            Back to menu
-          </Button>
-        </Box>
+        <Players
+          players={players}
+          handlePlayersChange={handlePlayersChange}
+          valuetext={valuetext}
+          playersSliderMarks={playersSliderMarks}
+          min={defaultValue.minPlayers}
+          max={defaultValue.maxPlayers}
+          setCurrentId={setCurrentId}
+        />
       </Wrapper>
       <Wrapper id="spies" currentId={currentId}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-          }}
-        >
-          <Typography>Number of spies</Typography>
-          <Slider
-            value={spies}
-            onChange={(e, newValue) => handleSpiesChange(newValue)}
-            getAriaValueText={valuetext}
-            step={1}
-            valueLabelDisplay="auto"
-            marks={spiesSliderMarks}
-            min={defaultValue.minSpies}
-            max={Math.round(players / 3)}
-            valueLabelFormat={valuetext}
-            sx={{
-              color: "#EAEAEA",
-              width: "340px",
-              "& .MuiSlider-markLabel": {
-                color: "#EAEAEA",
-                fontSize: "14px",
-              },
-              "& .MuiSlider-markLabelActive": {
-                color: "#1ABC9C",
-                fontWeight: "bold",
-              },
-            }}
-          />
-          <Button
-            sx={{ color: "#EAEAEA" }}
-            onClick={() => setCurrentId("menu")}
-          >
-            Back to menu
-          </Button>
-        </Box>
+        <Spies
+          spies={spies}
+          handleSpiesChange={handleSpiesChange}
+          valuetext={valuetext}
+          spiesSliderMarks={spiesSliderMarks}
+          min={defaultValue.minSpies}
+          max={Math.round(players / 3)}
+          setCurrentId={setCurrentId}
+        />
       </Wrapper>
       <Wrapper id="timer" currentId={currentId}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-          }}
-        >
-          <Typography>Timer</Typography>
-          <Slider
-            value={timer}
-            onChange={(e, newValue) => handleTimerChange(newValue)}
-            getAriaValueText={minutes}
-            step={1}
-            valueLabelDisplay="auto"
-            marks={timerSliderMarks}
-            min={defaultValue.minTimer}
-            max={defaultValue.maxTimer}
-            valueLabelFormat={minutes}
-            sx={{
-              color: "#EAEAEA",
-              width: "340px",
-              "& .MuiSlider-markLabel": {
-                color: "#EAEAEA",
-                fontSize: "14px",
-              },
-              "& .MuiSlider-markLabelActive": {
-                color: "#1ABC9C",
-                fontWeight: "bold",
-              },
-            }}
-          />
-          <Button
-            sx={{ color: "#EAEAEA" }}
-            onClick={() => setCurrentId("menu")}
-          >
-            Back to menu
-          </Button>
-        </Box>
+        <Timer
+          timer={timer}
+          handleTimerChange={handleTimerChange}
+          minutes={minutes}
+          timerSliderMarks={timerSliderMarks}
+          min={defaultValue.minTimer}
+          max={defaultValue.maxTimer}
+          setCurrentId={setCurrentId}
+        />
       </Wrapper>
       <Wrapper id="sets" currentId={currentId}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-          }}
-        >
-          <Typography>Sets</Typography>
-          <FormGroup>
-            {sets.map((x) => {
-              return (
-                <Box
-                  key={x.name}
-                  sx={{ display: "flex", flexDirection: "row" }}
-                >
-                  <FormControlLabel
-                    key={x.name}
-                    control={
-                      <Checkbox
-                        sx={{
-                          color: "#EAEAEA",
-                          "&.Mui-checked": {
-                            color: "#1ABC9C",
-                          },
-                        }}
-                        defaultChecked={selectedSets
-                          .map((x) => x.name)
-                          .includes(x.name)}
-                        onChange={(e, value) =>
-                          handleSelectedSetsChange(value, x.name)
-                        }
-                      />
-                    }
-                    label={x.name}
-                  />
-                  <IconButton
-                    sx={{
-                      color: "#EAEAEA",
-                      "&:hover": {
-                        color: "#1ABC9C",
-                        backgroundColor: "hsla(176, 94.60%, 56.30%, 0.10)",
-                      },
-                    }}
-                    onClick={() => handleEditIconClick(x)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    sx={{
-                      color: "#EAEAEA",
-                      "&:hover": {
-                        color: "#1ABC9C",
-                        backgroundColor: "hsla(176, 94.60%, 56.30%, 0.10)",
-                      },
-                      visibility: x.default ? "hidden" : "visible",
-                    }}
-                    onClick={() => handleRemoveSetIconClick(x)}
-                  >
-                    <ClearIcon />
-                  </IconButton>
-                </Box>
-              );
-            })}
-          </FormGroup>
-          <Box>
-            <TextField
-              sx={{
-                "& label": {
-                  color: "#EAEAEA",
-                },
-                "& label.Mui-focused": {
-                  color: "#1ABC9C",
-                },
-                "& .MuiInputBase-input": {
-                  color: "#EAEAEA",
-                },
-                "& .MuiInput-underline:before": {
-                  borderBottomColor: "#EAEAEA",
-                },
-                "& .MuiInput-underline:hover:before": {
-                  borderBottomColor: "#1ABC9C",
-                },
-                "& .MuiInput-underline:after": {
-                  borderBottomColor: "#1ABC9C",
-                },
-              }}
-              value={newSet}
-              onChange={(e) => setNewSet(e.target.value)}
-              label="set name"
-              variant="standard"
-            />
-            <IconButton
-              sx={{
-                color: "#EAEAEA",
-                "&:hover": {
-                  color: "#1ABC9C",
-                  backgroundColor: "hsla(176, 94.60%, 56.30%, 0.10)",
-                },
-              }}
-              onClick={handleAddSetIconClick}
-            >
-              <AddIcon />
-            </IconButton>
-          </Box>
-          <Button
-            sx={{ color: "#EAEAEA" }}
-            onClick={() => setCurrentId("menu")}
-          >
-            Back to menu
-          </Button>
-        </Box>
+        <Sets
+          sets={sets}
+          selectedSets={selectedSets}
+          handleSelectedSetsChange={handleSelectedSetsChange}
+          handleEditIconClick={handleEditIconClick}
+          handleRemoveSetIconClick={handleRemoveSetIconClick}
+          newSet={newSet}
+          setNewSet={setNewSet}
+          handleAddSetIconClick={handleAddSetIconClick}
+          setCurrentId={setCurrentId}
+        />
       </Wrapper>
       <Wrapper id="editSet" currentId={currentId}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-          }}
-        >
-          <Typography>{editedSet.name}</Typography>
-          <List dense={false}>
-            {editedSet.locations.map((x, index) => (
-              <Box
-                key={index}
-                alignItems="center"
-                display="flex"
-                flexDirection="row"
-              >
-                <ArrowRightIcon />
-                <Typography>{x}</Typography>
-                <IconButton
-                  sx={{
-                    color: "#EAEAEA",
-                    "&:hover": {
-                      color: "#1ABC9C",
-                      backgroundColor: "hsla(176, 94.60%, 56.30%, 0.10)",
-                    },
-                  }}
-                  onClick={() => handleDeletePlaceIconClick(x)}
-                >
-                  <ClearIcon />
-                </IconButton>
-              </Box>
-            ))}
-          </List>
-          <Box>
-            <TextField
-              sx={{
-                "& label": {
-                  color: "#EAEAEA",
-                },
-                "& label.Mui-focused": {
-                  color: "#1ABC9C",
-                },
-                "& .MuiInputBase-input": {
-                  color: "#EAEAEA",
-                },
-                "& .MuiInput-underline:before": {
-                  borderBottomColor: "#EAEAEA",
-                },
-                "& .MuiInput-underline:hover:before": {
-                  borderBottomColor: "#1ABC9C",
-                },
-                "& .MuiInput-underline:after": {
-                  borderBottomColor: "#1ABC9C",
-                },
-              }}
-              value={newPlace}
-              onChange={(e) => setNewPlace(e.target.value)}
-              label="place"
-              variant="standard"
-            />
-            <IconButton
-              sx={{
-                color: "#EAEAEA",
-                "&:hover": {
-                  color: "#1ABC9C",
-                  backgroundColor: "hsla(176, 94.60%, 56.30%, 0.10)",
-                },
-              }}
-              onClick={handleAddPlaceIconClick}
-            >
-              <AddIcon />
-            </IconButton>
-          </Box>
-          <Button
-            sx={{ color: "#EAEAEA" }}
-            onClick={() => setCurrentId("sets")}
-          >
-            Back to sets
-          </Button>
-        </Box>
+        <EditSet
+          editedSet={editedSet}
+          handleDeletePlaceIconClick={handleDeletePlaceIconClick}
+          setNewPlace={setNewPlace}
+          handleAddPlaceIconClick={handleAddPlaceIconClick}
+          setCurrentId={setCurrentId}
+          newPlace={newPlace}
+        />
       </Wrapper>
       <Wrapper id="roleDistribution" currentId={currentId}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-          }}
-        >
-          {!Number.isInteger(currentPlayer) ? (
-            <NeutralBox
-              text={neutralBoxText}
-              onClick={handleChangeBoxInDistribution}
-            />
-          ) : (
-            <RoleBox
-              place={currentPlace}
-              isSpy={currentSpies.includes(currentPlayer)}
-              onClick={handleChangeBoxInDistribution}
-            />
-          )}
-          <Button
-            sx={{ color: "#EAEAEA" }}
-            onClick={() => setCurrentId("menu")}
-          >
-            Back to menu
-          </Button>
-        </Box>
+        <RoleDistribution
+          currentPlayer={currentPlayer}
+          neutralBoxText={neutralBoxText}
+          handleChangeBoxInDistribution={handleChangeBoxInDistribution}
+          currentPlace={currentPlace}
+          isSpy={currentSpies.includes(currentPlayer)}
+          setCurrentId={setCurrentId}
+        />
       </Wrapper>
       <Wrapper id="countdown" currentId={currentId}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-          }}
-        >
-          <Countdown
-            renderer={({ minutes, seconds }) => (
-              <Typography sx={{ color: "#1ABC9C" }} variant="h4">
-                {String(minutes).padStart(2, "0")}:
-                {String(seconds).padStart(2, "0")}
-              </Typography>
-            )}
-            date={Date.now() + timer * 60000}
-            onComplete={handleCountdownOnComplete}
-          />
-          <Button
-            sx={{ color: "#EAEAEA" }}
-            onClick={() => setCurrentId("menu")}
-          >
-            Back to menu
-          </Button>
-        </Box>
+        <CountdownComponent
+          setCurrentId={setCurrentId}
+          handleCountdownOnComplete={handleCountdownOnComplete}
+          timer={timer}
+        />
       </Wrapper>
       <Wrapper id="gameFinished" currentId={currentId}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-          }}
-        >
-          <Typography>Game finished</Typography>
-          <Button
-            sx={{ color: "#EAEAEA" }}
-            onClick={() => setCurrentId("menu")}
-          >
-            Menu
-          </Button>
-        </Box>
+        <GameFinished setCurrentId={setCurrentId} />
       </Wrapper>
       <Wrapper id="menu" currentId={currentId}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-          }}
-        >
-          <Button
-            sx={{ color: "#EAEAEA" }}
-            onClick={() => setCurrentId("players")}
-          >
-            players
-          </Button>
-          <Button
-            sx={{ color: "#EAEAEA" }}
-            onClick={() => setCurrentId("spies")}
-          >
-            spies
-          </Button>
-          <Button
-            sx={{ color: "#EAEAEA" }}
-            onClick={() => setCurrentId("timer")}
-          >
-            timer
-          </Button>
-          <Button
-            sx={{ color: "#EAEAEA" }}
-            onClick={() => setCurrentId("sets")}
-          >
-            sets
-          </Button>
-          <Button
-            sx={{ backgroundColor: "#1ABC9C" }}
-            variant="contained"
-            onClick={() => setCurrentId("roleDistribution")}
-          >
-            start
-          </Button>
-        </Box>
+        <Menu setCurrentId={setCurrentId} />
       </Wrapper>
     </>
   );
