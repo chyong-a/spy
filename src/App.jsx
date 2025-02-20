@@ -309,6 +309,7 @@ function App() {
           handleAddPlaceIconClick={handleAddPlaceIconClick}
           setCurrentId={setCurrentId}
           newPlace={newPlace}
+          isEnglish={isEnglish}
         />
       </Wrapper>
       <Wrapper id="roleDistribution" currentId={currentId}>

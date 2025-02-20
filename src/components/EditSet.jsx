@@ -17,6 +17,7 @@ export const EditSet = ({
   setNewPlace,
   handleAddPlaceIconClick,
   setCurrentId,
+  isEnglish,
 }) => {
   return (
     <Box
@@ -76,7 +77,7 @@ export const EditSet = ({
           }}
           value={newPlace}
           onChange={(e) => setNewPlace(e.target.value)}
-          label="place"
+          label={isEnglish ? "place" : "место"}
           variant="standard"
         />
         <IconButton
@@ -93,7 +94,7 @@ export const EditSet = ({
         </IconButton>
       </Box>
       <Button sx={{ color: "#EAEAEA" }} onClick={() => setCurrentId("sets")}>
-        Back to sets
+        {isEnglish ? "Back to sets" : "К наборам"}
       </Button>
     </Box>
   );
