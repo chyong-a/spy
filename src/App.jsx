@@ -223,6 +223,11 @@ function App() {
   };
 
   useEffect(() => {
+    setSets(EnglishSets);
+    localStorage.setItem("sets", JSON.stringify(EnglishSets));
+  }, []);
+
+  useEffect(() => {
     if (currentId === "roleDistribution") {
       generatePlace();
       generateSpies();
@@ -241,9 +246,7 @@ function App() {
     } else {
       setNeutralBoxText(defaultValue.neutralBoxTextEnglish);
     }
-    if (localStorage.getItem("sets")) {
-      changeSetsInTheAccordanceWithLanguage();
-    }
+    changeSetsInTheAccordanceWithLanguage();
   }, [isEnglish]);
 
   return (
